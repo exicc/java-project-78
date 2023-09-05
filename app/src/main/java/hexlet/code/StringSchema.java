@@ -3,13 +3,13 @@ package hexlet.code;
 public class StringSchema extends BaseSchema {
     private int minLength;
     private String containsSubstring;
+    public StringSchema(Validator validator) {
+        super(validator);
+    }
     @Override
     public StringSchema required() {
         super.required();
         return this;
-    }
-    public StringSchema(Validator validator) {
-        super(validator);
     }
 
     public StringSchema minLength(int length) {
@@ -28,11 +28,9 @@ public class StringSchema extends BaseSchema {
             return false;
         }
 
-        if (!(data instanceof String)) {
+        if (!(data instanceof String strData)) {
             return false;
         }
-
-        String strData = (String) data;
 
         if (minLength > 0 && strData.length() < minLength) {
             return false;

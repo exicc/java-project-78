@@ -9,4 +9,8 @@ public class Validator {
     public NumberSchema number() {
         return new NumberSchema(this);
     }
+
+    public MapSchema map() {
+        return new MapSchema(this);
+    }
 }
