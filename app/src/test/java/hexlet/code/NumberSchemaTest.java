@@ -17,7 +17,6 @@ public class NumberSchemaTest {
                 () -> assertTrue(schema.isValid(1)),
                 () -> assertTrue(schema.isValid(-5)));
     }
-
     @Test
     @DisplayName("Positive number test")
     public void isPositiveTest() {
@@ -28,5 +27,17 @@ public class NumberSchemaTest {
                 () -> assertFalse(schema.isValid(-111)),
                 () -> assertFalse(schema.isValid(-5)));
     }
-
+    @Test
+    @DisplayName("Range test")
+    public void rangeTest() {
+        Validator v = new Validator();
+        NumberSchema schema = v.number().required().positive().range(4, 7);
+        assertAll(() -> assertFalse(schema.isValid(null)),
+                () -> assertTrue(schema.isValid(4)),
+                () -> assertTrue(schema.isValid(5)),
+                () -> assertTrue(schema.isValid(7)),
+                () -> assertFalse(schema.isValid(-5)),
+                () -> assertFalse(schema.isValid(10)),
+                () -> assertFalse(schema.isValid(2)));
+    }
 }

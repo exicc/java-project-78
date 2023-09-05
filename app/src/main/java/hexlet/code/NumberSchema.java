@@ -6,13 +6,13 @@ public class NumberSchema extends BaseSchema {
     private int minRange = Integer.MIN_VALUE;
     private int maxRange = Integer.MAX_VALUE;
 
+    public NumberSchema(Validator validator) {
+        super(validator);
+    }
     @Override
     public NumberSchema required() {
         super.required();
         return this;
-    }
-    public NumberSchema(Validator validator) {
-        super(validator);
     }
 
     public NumberSchema positive() {
@@ -28,11 +28,7 @@ public class NumberSchema extends BaseSchema {
 
     @Override
     public boolean isValid(Object data) {
-        if (!super.isValid(data)) {
-            return false;
-        }
-
-        if (!(data instanceof Number)) {
+        if (!super.isValid(data) || !(data instanceof Number)) {
             return false;
         }
 
