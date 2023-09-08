@@ -1,6 +1,7 @@
 package hexlet.code;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class MapSchema extends BaseSchema {
@@ -8,9 +9,11 @@ public class MapSchema extends BaseSchema {
     private int sizeLimit = -1;
 
     private boolean isRequired = false;
+    private Map<String, BaseSchema> propertySchemas;
 
     public MapSchema(Validator validator) {
         super(validator);
+        this.propertySchemas = new HashMap<>();
     }
     @Override
     public MapSchema required() {
@@ -21,8 +24,13 @@ public class MapSchema extends BaseSchema {
         this.sizeLimit = size;
         return this;
     }
+    public MapSchema shape(Map<String, BaseSchema> schemas) {
+        this.propertySchemas = schemas;
+        return this;
+    }
     @Override
     public boolean isValid(Object data) {
+
         if (isRequired && isNullMap(data)) {
             return false;
         }
@@ -36,6 +44,19 @@ public class MapSchema extends BaseSchema {
             return map.size() == sizeLimit;
         }
 
+        Map<?, ?> map = (Map<?, ?>) data;
+        for (String property : propertySchemas.keySet()) {
+            if (!map.containsKey(property)) {
+                return false;
+            }
+
+            Object propertyValue = map.get(property);
+            BaseSchema propertySchema = propertySchemas.get(property);
+
+            if (propertyValue != null && !propertySchema.isValid(propertyValue)) {
+                return false;
+            }
+        }
         return true;
     }
     private static boolean isNullMap(Object obj) {
