@@ -1,4 +1,6 @@
-package hexlet.code;
+package hexlet.code.schemas;
+
+import hexlet.code.Validator;
 
 public class StringSchema extends BaseSchema {
     private int minLength;

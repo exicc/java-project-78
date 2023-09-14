@@ -1,5 +1,7 @@
-package hexlet.code;
+package hexlet.code.schemas;
 
+
+import hexlet.code.Validator;
 
 public class NumberSchema extends BaseSchema {
     private boolean positive = false;

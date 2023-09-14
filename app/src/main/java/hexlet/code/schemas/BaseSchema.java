@@ -1,5 +1,7 @@
-package hexlet.code;
+package hexlet.code.schemas;
 
+
+import hexlet.code.Validator;
 
 public class BaseSchema {
     protected Validator validator;
