@@ -3,12 +3,24 @@ package hexlet.code;
 import hexlet.code.schemas.NumberSchema;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 
 public class NumberSchemaTest {
+    @Test
+    @DisplayName("Bad data test")
+    public void badDataTest() {
+        Validator v = new Validator();
+        NumberSchema schema =  v.number().required();
+        assertAll(() -> assertFalse(schema.isValid("Test")),
+                () -> assertFalse(schema.isValid(Map.of())),
+                () -> assertFalse(schema.isValid(Map.of(1, 2))));
+    }
     @Test
     @DisplayName("Required test")
     public void requiredTest() {

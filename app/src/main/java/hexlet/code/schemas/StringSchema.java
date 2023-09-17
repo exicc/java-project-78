@@ -1,43 +1,46 @@
 package hexlet.code.schemas;
 
-import hexlet.code.Validator;
 
-public class StringSchema extends BaseSchema {
-    private int minLength;
-    private String containsSubstring;
-    public StringSchema(Validator validator) {
-        super(validator);
-    }
-    @Override
+public final class StringSchema extends BaseSchema {
+
     public StringSchema required() {
-        super.required();
+        addCheck(
+                "required",
+                value -> value != null && !isNullString(value) && value instanceof String
+        );
         return this;
     }
 
     public StringSchema minLength(int length) {
-        minLength = length;
+        addCheck(
+                "minLength",
+                value -> {
+                    if (value == null || isNullString(value)) {
+                        return false;
+                    }
+                    String strValue = (String) value;
+                    return strValue.length() >= length;
+                }
+        );
         return this;
     }
-
     public StringSchema contains(String substring) {
-        containsSubstring = substring;
+        addCheck(
+                "contains",
+                value -> {
+                    if (value == null || isNullString(value)) {
+                        return false;
+                    }
+                    String strValue = (String) value;
+                    return strValue.contains(substring);
+                }
+        );
         return this;
     }
-
-    @Override
-    public boolean isValid(Object data) {
-        if (!super.isValid(data)) {
-            return false;
+    private static boolean isNullString(Object obj) {
+        if (obj instanceof String str) {
+            return str.isEmpty();
         }
-
-        if (!(data instanceof String strData)) {
-            return false;
-        }
-
-        if (minLength > 0 && strData.length() < minLength) {
-            return false;
-        }
-
-        return containsSubstring == null || strData.contains(containsSubstring);
+        return false;
     }
 }

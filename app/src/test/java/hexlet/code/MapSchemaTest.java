@@ -10,9 +10,19 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 
 public class MapSchemaTest {
+    @Test
+    @DisplayName("Bad data test")
+    public void badDataTest() {
+        Validator v = new Validator();
+        MapSchema schema = v.map().required();
+
+        assertAll(() -> assertFalse(schema.isValid(10)),
+                () -> assertFalse(schema.isValid("Test")));
+    }
     @Test
     @DisplayName("Required test")
     public void requiredTest() {
