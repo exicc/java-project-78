@@ -1,7 +1,6 @@
 package hexlet.code.schemas;
 
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class MapSchema extends BaseSchema {
@@ -10,7 +9,7 @@ public class MapSchema extends BaseSchema {
     public MapSchema required() {
         addCheck(
                 "required",
-                value -> value != null && !isNullMap(value) && value instanceof Map<?, ?>
+                value -> value instanceof Map<?, ?> map && !map.isEmpty()
         );
 
         return this;
@@ -18,45 +17,18 @@ public class MapSchema extends BaseSchema {
     public MapSchema sizeof(int size) {
         addCheck(
                 "sizeof",
-                value -> {
-                    if (value == null || isNullMap(value)) {
-                        return false;
-                    }
-                    Map<?, ?> mapValue = (HashMap<?, ?>) value;
-                    return mapValue.size() == size;
-                }
+                value -> value instanceof Map<?, ?> map && map.size() == size
         );
         return this;
     }
     public MapSchema shape(Map<String, BaseSchema> schemas) {
         addCheck(
                 "shape",
-                value -> {
-                    if (value == null || isNullMap(value)) {
-                        return false;
-                    }
-                    Map<?, ?> mapValue = (HashMap<?, ?>) value;
-                    for (String property : schemas.keySet()) {
-                        if (!mapValue.containsKey(property)) {
-                            return false;
-                        }
-
-                        Object propertyValue = mapValue.get(property);
-                        BaseSchema propertySchema = schemas.get(property);
-                        if (propertyValue != null && !propertySchema.isValid(propertyValue)) {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
+                value -> schemas.entrySet().stream().allMatch(e -> {
+                    Object v = ((Map<?, ?>) value).get(e.getKey());
+                    return e.getValue().isValid(v);
+                })
         );
-
         return this;
-    }
-    private static boolean isNullMap(Object obj) {
-        if (obj instanceof Map<?, ?> map) {
-            return map.isEmpty();
-        }
-        return false;
     }
 }

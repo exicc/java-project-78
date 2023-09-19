@@ -1,7 +1,6 @@
 package hexlet.code.schemas;
 
 
-
 public final class NumberSchema extends BaseSchema {
 
     public NumberSchema required() {
@@ -17,9 +16,13 @@ public final class NumberSchema extends BaseSchema {
                 "positive",
                 value -> {
                     if (value == null) {
-                        return false;
+                        return true;
                     }
-                    return ((int) value) > 0;
+                    if (value instanceof Integer) {
+                        int intValue = (Integer) value;
+                        return intValue > 0;
+                    }
+                    return false;
                 }
         );
         return this;
@@ -28,13 +31,7 @@ public final class NumberSchema extends BaseSchema {
     public NumberSchema range(int min, int max) {
         addCheck(
                 "range",
-                value -> {
-                    if (value == null) {
-                        return false;
-                    }
-                    int intValue = (int) value;
-                    return intValue >= min && intValue <= max;
-                }
+                value -> value instanceof Integer obj && obj >= min && obj <= max
         );
         return this;
     }

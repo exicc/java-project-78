@@ -21,7 +21,8 @@ public class MapSchemaTest {
         MapSchema schema = v.map().required();
 
         assertAll(() -> assertFalse(schema.isValid(10)),
-                () -> assertFalse(schema.isValid("Test")));
+                () -> assertFalse(schema.isValid("Test")),
+                () -> assertFalse(schema.isValid(null)));
     }
     @Test
     @DisplayName("Required test")

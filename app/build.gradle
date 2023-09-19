@@ -26,6 +26,8 @@ dependencies {
 
     implementation 'org.junit.jupiter:junit-jupiter:5.10.0'
 
+    testImplementation("org.assertj:assertj-core:3.24.2")
+
     errorprone 'com.google.errorprone:error_prone_core:2.20.0'
 }
 
@@ -58,7 +60,6 @@ checkstyle {
 jar {
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
     manifest {
-        attributes "Main-Class": "hexlet.code.App"
     }
 
     from {
