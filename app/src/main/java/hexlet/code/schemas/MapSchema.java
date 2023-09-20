@@ -9,7 +9,7 @@ public class MapSchema extends BaseSchema {
     public MapSchema required() {
         addCheck(
                 "required",
-                value -> value instanceof Map<?, ?> map && !map.isEmpty()
+                value -> value instanceof Map<?, ?>
         );
 
         return this;

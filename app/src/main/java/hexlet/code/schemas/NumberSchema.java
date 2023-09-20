@@ -14,16 +14,7 @@ public final class NumberSchema extends BaseSchema {
     public NumberSchema positive() {
         addCheck(
                 "positive",
-                value -> {
-                    if (value == null) {
-                        return true;
-                    }
-                    if (value instanceof Integer) {
-                        int intValue = (Integer) value;
-                        return intValue > 0;
-                    }
-                    return false;
-                }
+                value -> value instanceof Integer obj && obj > 0 || value == null
         );
         return this;
     }

@@ -11,9 +11,60 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class MapSchemaTest {
+    @Test
+    public void testMapValidator() {
+        Validator v = new Validator();
+        MapSchema schema = v.map();
+
+        assertThat(schema.isValid(null)).isTrue();
+        assertThat(schema.isValid(new HashMap<>())).isTrue();
+
+        schema.required();
+        assertThat(schema.isValid(null)).isFalse();
+        assertThat(schema.isValid(new HashMap<>())).isTrue();
+
+        schema.sizeof(2);
+        assertThat(schema.isValid(new HashMap<>())).isFalse();
+        Map<String, String> actual1 = new HashMap<>();
+        actual1.put("key1", "value1");
+        assertThat(schema.isValid(actual1)).isFalse();
+        actual1.put("key2", "value2");
+        assertThat(schema.isValid(actual1)).isTrue();
+
+        Map<String, BaseSchema> schemas = new HashMap<>();
+        schemas.put("name", v.string().required().contains("ya"));
+        schemas.put("age", v.number().positive());
+        schema.shape(schemas);
+
+        Map<String, Object> actual2 = new HashMap<>();
+        actual2.put("name", "Kolya");
+        actual2.put("age", 100);
+        assertThat(schema.isValid(actual2)).isTrue();
+
+        Map<String, Object> actual3 = new HashMap<>();
+        actual3.put("name", "Maya");
+        actual3.put("age", null);
+        assertThat(schema.isValid(actual3)).isTrue();
+
+        Map<String, Object> actual4 = new HashMap<>();
+        actual4.put("name", "");
+        actual4.put("age", null);
+        assertThat(schema.isValid(actual4)).isFalse();
+
+        Map<String, Object> actual5 = new HashMap<>();
+        actual5.put("name", "Valya");
+        actual5.put("age", -5);
+        assertThat(schema.isValid(actual5)).isFalse();
+
+        Map<String, Object> actual6 = new HashMap<>();
+        actual6.put("name", "Ada");
+        actual6.put("age", 15);
+        assertThat(schema.isValid(actual6)).isFalse();
+    }
     @Test
     @DisplayName("Bad data test")
     public void badDataTest() {
@@ -30,13 +81,12 @@ public class MapSchemaTest {
         Validator v = new Validator();
         MapSchema schema = v.map();
 
-        Map<String, String> testMap = new HashMap<>();
 
-        assertTrue(schema.isValid(testMap));
+        assertTrue(schema.isValid(Map.of()));
 
         schema.required();
 
-        assertFalse(schema.isValid(testMap));
+        assertFalse(schema.isValid(null));
     }
     @Test
     @DisplayName("Sizeof test")
