@@ -6,6 +6,6 @@
 # Data validator
 ### This is a simple library for validating different types of data for your application
 ## System requirements
-Java >= 20.0.1
+Java  20.0.1
 
-Gradle >= 8.2.1
+Gradle  8.2.1
